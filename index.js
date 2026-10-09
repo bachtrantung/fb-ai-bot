@@ -15,6 +15,11 @@ Nhiệm vụ: Trả lời bình luận ngắn gọn (1-2 câu), lịch sự, t�
 Nếu khách hỏi giá hoặc mua hàng, chào khách và nhắc họ kiểm tra tin nhắn Messenger của Page.
 `;
 
+// Trang chủ kiểm tra trạng thái hoạt động
+app.get('/', (req, res) => {
+  res.send('Server AI Bot đang hoạt động bình thường!');
+});
+
 // Xác thực Webhook với Meta
 app.get('/webhook', (req, res) => {
   const mode = req.query['hub.mode'];
