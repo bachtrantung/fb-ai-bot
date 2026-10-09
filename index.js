@@ -1,13 +1,13 @@
 const express = require('express');
 const axios = require('axios');
-const { GoogleGenAI } = require('@google/genai');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const app = express();
 app.use(express.json());
 
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const SYSTEM_INSTRUCTION = `
 Bạn là trợ lý Fanpage hỗ trợ khách hàng.
@@ -56,13 +56,13 @@ app.post('/webhook', async (req, res) => {
 
 async function handleComment(commentId, text) {
   try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: text,
-      config: { systemInstruction: SYSTEM_INSTRUCTION }
+    const model = genAI.getGenerativeModel({ 
+      model: 'gemini-1.5-flash',
+      systemInstruction: SYSTEM_INSTRUCTION 
     });
 
-    const reply = response.text || 'Cảm ơn bạn đã quan tâm đến bài viết!';
+    const result = await model.generateContent(text);
+    const reply = result.response.text() || 'Cảm ơn bạn đã quan tâm đến bài viết!';
 
     await axios.post(`https://graph.facebook.com/v19.0/${commentId}/comments`, {
       message: reply,
