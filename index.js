@@ -80,5 +80,5 @@ async function handleComment(commentId, text) {
   }
 }
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server chạy trên port ${PORT}`));
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, '0.0.0.0', () => console.log(`Server chạy trên port ${PORT}`));
