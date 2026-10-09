@@ -15,9 +15,9 @@ Nhiệm vụ: Trả lời bình luận ngắn gọn (1-2 câu), lịch sự, t�
 Nếu khách hỏi giá hoặc mua hàng, chào khách và nhắc họ kiểm tra tin nhắn Messenger của Page.
 `;
 
-// Trang chủ kiểm tra trạng thái hoạt động
+// Đường dẫn kiểm tra máy chủ
 app.get('/', (req, res) => {
-  res.send('Server AI Bot đang hoạt động bình thường!');
+  res.status(200).send('Server AI Bot đang hoạt động bình thường!');
 });
 
 // Xác thực Webhook với Meta
@@ -29,11 +29,11 @@ app.get('/webhook', (req, res) => {
   if (mode === 'subscribe' && token === VERIFY_TOKEN) {
     res.status(200).send(challenge);
   } else {
-    res.sendStatus(403);
+    res.status(403).send('Forbidden');
   }
 });
 
-// Nhận bình luận mới
+// Nhận sự kiện từ Meta
 app.post('/webhook', async (req, res) => {
   const body = req.body;
 
@@ -81,4 +81,6 @@ async function handleComment(commentId, text) {
 }
 
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, '0.0.0.0', () => console.log(`Server chạy trên port ${PORT}`));
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server chạy trên port ${PORT}`);
+});
